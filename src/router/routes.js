@@ -1,9 +1,37 @@
-const routes = [
+import MainLayout from "layouts/MainLayout.vue";
+import IndexPage from "pages/IndexPage.vue";
+import PengajuanPage from "pages/PengajuanPage.vue";
+import CustomerPage from "pages/CustomerPage.vue";
+
+const useRoutes = (routes) => {
+  return routes.map((route) => ({
+    ...route,
+    meta: {
+      layout: MainLayout,
+    }
+  }))
+}
+
+const routes = useRoutes( [
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: '',
+    component: MainLayout,
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') }
+      {
+        path: '/',
+        component: IndexPage,
+        name: 'IndexPage'
+      },
+      {
+        path: '/pengajuan',
+        name: 'Pengajuan',
+        component: PengajuanPage
+      },
+      {
+        path: '/customer',
+        name: 'Customer',
+        component: CustomerPage
+      }
     ]
   },
 
@@ -13,6 +41,6 @@ const routes = [
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   }
-]
+])
 
 export default routes
