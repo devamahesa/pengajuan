@@ -16,7 +16,7 @@ function toggleLeftDrawer () {
 
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated bordered>
+    <q-header >
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer"/>
         <q-toolbar-title>

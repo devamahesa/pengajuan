@@ -36,7 +36,7 @@ const breadCrumbs = computed(() => {
         <q-btn :ripple="false" unelevated color="primary" class="q-mr-md " icon="home"/>
         <div class="section-header">
           <h5 class="q-my-xs">{{props.title}}</h5>
-          <p class="q-my-xs" style="color: #a2a2a2">{{props.subtitle}}</p>
+          <p class="q-my-xs" style="color: gray">{{props.subtitle}}</p>
         </div>
       </div>
     </div>
