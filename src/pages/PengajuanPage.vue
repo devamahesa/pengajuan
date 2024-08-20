@@ -1,5 +1,7 @@
 <script setup>
 
+import AppPage from "components/AppPage.vue";
+
 const columns = [
 
   { name: 'name', align: 'center', label: 'Nama', field: 'name', sortable: true },
@@ -37,26 +39,32 @@ const rows = [
 </script>
 
 <template>
-  <div class="q-pa-md">
-    <q-table
-      title="Data Pengajuan"
-      :rows="rows"
-      :columns="columns"
-      row-key="name"
-    >
-      <template v-slot:body-cell-status="props">
-        <q-td
-          :props="props">
-          <q-btn outline color="primary" :ripple="false"> {{props.row.status}}</q-btn>
-        </q-td>
-      </template>
+  <AppPage title="Semua Pengajuan" subtitle="Menampilkan semua list pengajuan pembiayaan">
+    <template v-slot:default>
+      <div class="q-py-md">
+        <q-table
+          title="Data Pengajuan"
+          :rows="rows"
+          :columns="columns"
+          row-key="name"
+        >
+          <template v-slot:body-cell-status="props">
+            <q-td
+              :props="props">
+              <q-btn dense outline color="primary" :ripple="false">{{props.row.status}}</q-btn>
+            </q-td>
+          </template>
 
-      <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
-          <q-btn color="green" size="sm" rounded icon="done"></q-btn>
-        </q-td>
-      </template>
+          <template v-slot:body-cell-actions="props">
+            <q-td :props="props">
+              <div class="q-pa-sm q-gutter-sm">
+                <q-btn outline unelevated color="green" size="sm" round icon="done"><q-tooltip>Approve</q-tooltip></q-btn>
+              </div>
+            </q-td>
+          </template>
 
-    </q-table>
-  </div>
+        </q-table>
+      </div>
+    </template>
+  </AppPage>
 </template>

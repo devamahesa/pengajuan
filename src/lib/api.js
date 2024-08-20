@@ -7,3 +7,7 @@ export const getCustomer = (id) => {
 export const getListCustomer = () => {
   return get({path: '/customer'})
 }
+
+export const getListVehicle = () => {
+  return get({path: '/vehicle'})
+}

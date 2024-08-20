@@ -16,7 +16,7 @@ export const sidebarMenu = [
       {
         name: 'Vehicles',
         icon: 'directions_car',
-        to: 'VehiclesPage',
+        to: 'Vehicle',
       },
 
     ]
