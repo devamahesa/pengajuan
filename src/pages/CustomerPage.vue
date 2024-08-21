@@ -36,7 +36,7 @@ function createNewCustomer() {
 }
 
 const filter = ref('')
-
+const viewDialog = ref(false);
 
 </script>
 
@@ -66,7 +66,7 @@ const filter = ref('')
            <template v-slot:body-cell-actions="props">
              <q-td :props="props">
                <div class="q-pa-sm q-gutter-sm">
-                 <q-btn outline color="info" size="sm" round icon="visibility">
+                 <q-btn outline color="info" size="sm" round icon="visibility" @click="viewDialog = true">
                    <q-tooltip>View</q-tooltip>
                  </q-btn>
                  <q-btn outline color="warning" size="sm" round icon="edit">
@@ -86,6 +86,29 @@ const filter = ref('')
            </template>
          </q-table>
        </q-card>
+
+       <q-dialog
+         v-model="viewDialog"
+         transition-show="fade"
+         transition-hide="fade"
+         transition-duration="200"
+       >
+         <q-card>
+           <q-card-section>
+             <div class="text-h6">Inception</div>
+           </q-card-section>
+
+           <q-card-section class="q-pt-none">
+             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis laudantium minus earum totam modi laborum illo, corporis fuga saepe animi aliquam ea enim assumenda ut nulla natus aperiam quis. Iste.
+           </q-card-section>
+
+           <q-card-actions align="right" class="text-primary">
+             <q-btn flat label="Open another dialog" />
+             <q-btn flat label="Close" v-close-popup />
+           </q-card-actions>
+         </q-card>
+       </q-dialog>
+
      </div>
    </template>
  </AppPage>
