@@ -3,6 +3,7 @@ import IndexPage from "pages/IndexPage.vue";
 import PengajuanPage from "pages/PengajuanPage.vue";
 import CustomerPage from "pages/CustomerPage.vue";
 import VehiclePage from "pages/VehiclePage.vue";
+import CustomerForm from "components/CustomerForm.vue";
 
 const useRoutes = (routes) => {
   return routes.map((route) => ({
@@ -30,13 +31,29 @@ const routes = useRoutes( [
       },
       {
         path: '/kendaraan',
-        name: 'Vehicle',
-        component: VehiclePage
+        children: [
+          {
+            path: '',
+            name: 'Vehicle',
+            component: VehiclePage
+          },
+        ]
       },
       {
         path: '/customer',
-        name: 'Customer',
-        component: CustomerPage
+        children: [
+          {
+            path: '',
+            name: 'Customer',
+            component: CustomerPage
+          },
+          {
+            path: 'create',
+            name: 'CustomerForm',
+            component: CustomerForm
+          }
+        ],
+
       }
     ]
   },
