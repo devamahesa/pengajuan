@@ -1,7 +1,11 @@
-import {get} from "src/lib/httpHelper.js";
+import {get,post} from "src/lib/httpHelper.js";
 
 export const getCustomer = (id) => {
   return get({path: `/customer/${id}`})
+}
+
+export const postCustomer = (data) => {
+  return post({path: '/customer', data: data})
 }
 
 export const getListCustomer = () => {

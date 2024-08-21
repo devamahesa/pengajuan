@@ -3,13 +3,30 @@ import axios from "axios";
 const baseUrl = import.meta.env.VITE_BE_URL;
 
 export const get = ({path, params, isNeedAuth = false, isMultipartForm = false}) => {
-  return axios({
-    baseURL: baseUrl,
-    method: 'get',
-    url: path,
-  }).then(res => {
-    return res.data
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    return axios({
+      baseURL: baseUrl,
+      method: 'get',
+      url: path,
+    }).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err.response?.data)
+    })
+  })
+}
+
+export const post = ({path, data, isNeedAuth = false, isMultipartForm = false}) => {
+  return new Promise((resolve, reject) => {
+    axios({
+      baseURL: baseUrl,
+      method: 'post',
+      url: path,
+      data: data
+    }).then((res) => {
+      resolve(res)
+    }, ).catch((err) => {
+      reject(err.response?.data)
+    })
   })
 }
