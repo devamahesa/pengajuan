@@ -4,20 +4,10 @@ import {onMounted, ref} from "vue";
 import {getCustomer, getListCustomer} from "src/lib/api.js";
 import AppPage from "components/AppPage.vue";
 import dayjs from "dayjs";
+import {useRoute, useRouter} from "vue-router";
 import ('dayjs/locale/id');
 
-const cust = ref({
-  id_cust : null,
-  custName: null,
-  nik: null,
-  birthDate: null,
-  maritalStatus: null,
-  ktpFilename: null,
-  kkFilename: null,
-  created_at: null,
-  updated_at: null,
-  deleted_at: null
-})
+
 
 const columns = [
   {name: 'custName', align:'left', label: 'Nama Pelanggan', field:'custName', sortable: true},
@@ -31,12 +21,21 @@ const columns = [
 
 const allData = ref([])
 
+const router = useRouter();
 
 onMounted(() => {
   getListCustomer().then((res) =>{
-    allData.value = res
+    allData.value = res.data
+  }).catch(err => {
+    console.log(err)
   })
 });
+
+function createNewCustomer() {
+  return router.push({name: 'CustomerForm'})
+}
+
+const filter = ref('')
 
 
 </script>
@@ -46,11 +45,24 @@ onMounted(() => {
 
    <template v-slot:default>
      <div class="q-py-md">
+       <div class="col q-py-md" align="right">
+         <q-btn unelevated color="primary" @click="createNewCustomer()">Tambah</q-btn>
+       </div>
+
        <q-card>
          <q-table
            :rows="allData"
            :columns="columns"
+           :filter="filter"
          >
+           <template v-slot:top-right>
+             <q-input dense outlined debounce="300" v-model="filter" placeholder="Search" clearable>
+               <template v-slot:append>
+                 <q-icon name="search"/>
+               </template>
+             </q-input>
+           </template>
+
            <template v-slot:body-cell-actions="props">
              <q-td :props="props">
                <div class="q-pa-sm q-gutter-sm">
