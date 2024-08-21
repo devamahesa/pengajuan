@@ -29,7 +29,7 @@ const breadCrumbs = computed(() => {
 </script>
 
 <template>
-  <div class="row q-pt-xl q-pa-lg items-center">
+  <div class="row q-pt-xl q-px-lg q-pb-md items-center">
 
     <div class="col">
       <div class="row">

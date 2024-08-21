@@ -18,7 +18,7 @@ const columns = [
 
 onMounted(() => {
   getListVehicle().then((res) =>{
-    allData.value = res
+    allData.value = res.data
   })
 });
 
