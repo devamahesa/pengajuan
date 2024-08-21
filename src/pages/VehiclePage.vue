@@ -1,8 +1,8 @@
 <script setup>
 import AppPage from "components/AppPage.vue";
 import {onMounted, ref} from "vue";
-import {getListCustomer, getListVehicle} from "src/lib/api.js";
-import dayjs from "dayjs";
+import {getListVehicle} from "src/lib/api.js";
+import {toIDR} from "../utils/currencyFormatter.js";
 
 const allData = ref([])
 
@@ -53,7 +53,7 @@ onMounted(() => {
 
           <template v-slot:body-cell-harga="props">
             <q-td :props="props">
-              {{new Intl.NumberFormat('id-ID',{style: 'currency',currency: 'IDR'}).format(props.row.harga)}}
+              {{toIDR(props.row.harga)}}
             </q-td>
           </template>
         </q-table>
