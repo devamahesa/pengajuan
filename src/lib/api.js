@@ -15,3 +15,7 @@ export const getListCustomer = () => {
 export const getListVehicle = () => {
   return get({path: '/vehicle'})
 }
+
+export const getListPinjaman = () => {
+  return get({path: 'vehicle/pinjaman'})
+}

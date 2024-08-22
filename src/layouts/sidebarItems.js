@@ -18,6 +18,11 @@ export const sidebarMenu = [
         icon: 'directions_car',
         to: 'Vehicle',
       },
+      {
+        name: 'Pinjaman',
+        icon: 'credit_card',
+        to: 'Pinjaman',
+      },
 
     ]
   },

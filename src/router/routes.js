@@ -4,6 +4,7 @@ import PengajuanPage from "pages/PengajuanPage.vue";
 import CustomerPage from "pages/CustomerPage.vue";
 import VehiclePage from "pages/VehiclePage.vue";
 import CustomerForm from "components/CustomerForm.vue";
+import PinjamanPage from "pages/PinjamanPage.vue";
 
 const useRoutes = (routes) => {
   return routes.map((route) => ({
@@ -54,7 +55,17 @@ const routes = useRoutes( [
           }
         ],
 
-      }
+      },
+      {
+        path: '/kredit',
+        children: [
+          {
+            path: '',
+            name: 'Pinjaman',
+            component: PinjamanPage
+          },
+        ]
+      },
     ]
   },
 
