@@ -20,6 +20,10 @@ export const getListPinjaman = () => {
   return get({path: 'vehicle/pinjaman'})
 }
 
+export const getListPinjamanByIdVehicle = (idVehicle) => {
+  return get({path: `pinjaman/vehicle/${idVehicle}`})
+}
+
 export const getListPengajuan = () => {
   return get({path: 'pengajuan'})
 }

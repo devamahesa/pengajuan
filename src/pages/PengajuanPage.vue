@@ -4,6 +4,7 @@ import AppPage from "components/AppPage.vue";
 import {onMounted, ref} from "vue";
 import {getListPengajuan} from "src/lib/api.js";
 import {toIDR} from "../utils/currencyFormatter.js";
+import {useRouter} from "vue-router";
 
 const filter = ref(null)
 
@@ -20,12 +21,17 @@ const columns = [
 ]
 
 const rows = ref([])
+const router = useRouter();
 
 onMounted(() => {
   getListPengajuan().then((res) => {
     rows.value = res.data
   })
 })
+
+function createNewCustomer() {
+  return router.push({name: 'PengajuanForm'})
+}
 
 const viewDialog = ref(false);
 

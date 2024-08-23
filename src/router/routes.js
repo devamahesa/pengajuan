@@ -5,6 +5,7 @@ import CustomerPage from "pages/CustomerPage.vue";
 import VehiclePage from "pages/VehiclePage.vue";
 import CustomerForm from "components/CustomerForm.vue";
 import PinjamanPage from "pages/PinjamanPage.vue";
+import PengajuanForm from "components/PengajuanForm.vue";
 
 const useRoutes = (routes) => {
   return routes.map((route) => ({
@@ -27,8 +28,18 @@ const routes = useRoutes( [
       },
       {
         path: '/pengajuan',
-        name: 'Pengajuan',
-        component: PengajuanPage
+        children: [
+          {
+            path: '',
+            name: 'Pengajuan',
+            component: PengajuanPage
+          },
+          {
+            path: 'create',
+            name: 'PengajuanForm',
+            component: PengajuanForm
+          }
+        ]
       },
       {
         path: '/kendaraan',
