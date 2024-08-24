@@ -5,14 +5,16 @@ import {onMounted, reactive, ref, watch} from "vue";
 import {required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import {
-  getCustomer,
   getListCustomer,
   getListPinjaman,
   getListPinjamanByIdVehicle,
-  getListVehicle
+  getNextNumber, postPengajuan
 } from "src/lib/api.js";
+import {useRouter} from "vue-router";
 
 const $q = useQuasar();
+const router = useRouter();
+
 const pengajuan = ref({
   noPengajuan: null,
   buktiBayarFilename: null,
@@ -73,13 +75,50 @@ const filterPinjaman = (val, update, abort) => {
   }
 }
 
+const showNotif = (message) => {
+  return $q.notify({
+    type: 'positive',
+    progress: true,
+    message: 'Success',
+    color: 'positive',
+    position: "top-right",
+    caption: message,
+    icon: 'check_circle',
+    timeout:'2000'
+  })
+}
 
-const onSubmit = () => {
-  console.log(pengajuan.value)
+const back = () => {
+  return router.push({name: 'Pengajuan'})
+}
+
+
+const onSubmit = async () => {
+  const valid = await $vuelidateForm.value.$validate();
+  if(valid){
+    let params = {
+      noPengajuan: pengajuan.value.noPengajuan,
+      idCustomer: pengajuan.value.customer,
+      idKendaraan: pengajuan.value.kendaraan,
+      idPinjaman: pengajuan.value.pinjaman
+    }
+    return postPengajuan(params)
+      .then((res) => {
+        console.log(res)
+        showNotif(res.data);
+        return back()
+      }).catch((err) => {
+        showNotif(err.message);
+      }).finally(() => {
+
+      })
+  }
 }
 
 onMounted(() => {
-  pengajuan.value.noPengajuan = 'CRE/CUST/007'
+  getNextNumber().then(res =>{
+    pengajuan.value.noPengajuan = res.data
+  })
 })
 
 const $vuelidateForm = useVuelidate(rules, pengajuan)

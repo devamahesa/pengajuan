@@ -27,3 +27,11 @@ export const getListPinjamanByIdVehicle = (idVehicle) => {
 export const getListPengajuan = () => {
   return get({path: 'pengajuan'})
 }
+
+export const postPengajuan = (params) => {
+  return post({path : '/pengajuan', params: params})
+}
+
+export const getNextNumber = () => {
+  return get({path: '/pengajuan/nextGeneratedNum'})
+}
