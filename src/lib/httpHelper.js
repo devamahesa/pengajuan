@@ -16,13 +16,14 @@ export const get = ({path, params, isNeedAuth = false, isMultipartForm = false})
   })
 }
 
-export const post = ({path, data, isNeedAuth = false, isMultipartForm = false}) => {
+export const post = ({path, data, params = null, isNeedAuth = false, isMultipartForm = false}) => {
   return new Promise((resolve, reject) => {
     axios({
       baseURL: baseUrl,
       method: 'post',
       url: path,
-      data: data
+      data: data,
+      params: params,
     }).then((res) => {
       resolve(res)
     }, ).catch((err) => {
