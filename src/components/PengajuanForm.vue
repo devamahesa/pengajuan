@@ -11,6 +11,7 @@ import {
   getNextNumber, postPengajuan
 } from "src/lib/api.js";
 import {useRouter} from "vue-router";
+import QPreloadedSelect from "components/QPreloadedSelect.vue";
 
 const $q = useQuasar();
 const router = useRouter();
@@ -138,37 +139,17 @@ const $vuelidateForm = useVuelidate(rules, pengajuan)
 
             <div class="row q-my-lg">
               <div class="col-6 q-pr-md q-gutter-y-sm">
-                <label class="q-my-sm">Nama Customer<span class="text-red">*</span></label>
-                <q-select
-                  use-input
-                  clearable
-                  outlined dense
-                  v-model="pengajuan.customer"
-                  lazy-rules
-                  :options="customerOptions.value"
-                  map-options
-                  emit-value
+                <QPreloadedSelect
+                  label="Nama Customer"
+                  required
                   option-label="custName"
                   option-value="id_cust"
-                  @blur="$vuelidateForm.customer.$touch"
-                  :error="$vuelidateForm.customer.$errors.length>0"
+                  v-model="pengajuan.customer"
+                  :options="customerOptions.value"
                   @filter="filterCustomer"
-                >
-                  <template v-slot:error>
-                    <div v-for="err in $vuelidateForm.customer.$errors" :key="err.$uid">
-                      {{ err?.$message }}
-                    </div>
-                  </template>
-
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-
-                </q-select>
+                  @blur="$vuelidateForm.customer.$touch"
+                  :errors="$vuelidateForm.customer.$errors"
+                />
               </div>
 
               <div class="col-6 q-pr-md q-gutter-y-sm">
@@ -188,73 +169,33 @@ const $vuelidateForm = useVuelidate(rules, pengajuan)
 
             <div class="row q-my-lg">
               <div class="col-6 q-pr-md q-gutter-y-sm">
-                <label class="q-my-sm">Kendaraan<span class="text-red">*</span></label>
-                <q-select
-                  use-input
-                  clearable
-                  outlined dense
-                  v-model="pengajuan.kendaraan"
-                  lazy-rules
-                  :options="kendaraanOptions.value"
-                  map-options
-                  emit-value
+                <QPreloadedSelect
+                  label="Kendaraan"
+                  required
                   option-label="type"
                   option-value="id_kendaraan"
-                  @blur="$vuelidateForm.kendaraan.$touch"
-                  :error="$vuelidateForm.kendaraan.$errors.length>0"
+                  v-model="pengajuan.kendaraan"
+                  :options="kendaraanOptions.value"
                   @filter="filterKendaraan"
+                  @blur="$vuelidateForm.kendaraan.$touch"
+                  :errors="$vuelidateForm.kendaraan.$errors"
                   @update:model-value="resetPinjaman"
-                >
-                  <template v-slot:error>
-                    <div v-for="err in $vuelidateForm.kendaraan.$errors" :key="err.$uid">
-                      {{ err?.$message }}
-                    </div>
-                  </template>
-
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-
-                </q-select>
+                />
               </div>
 
               <div class="col-6 q-pr-md q-gutter-y-sm">
-                <label class="q-my-sm">Lama Kredit<span class="text-red">*</span></label>
-                <q-select
+                <QPreloadedSelect
                   :disable="!pengajuan.kendaraan"
-                  use-input
-                  clearable
-                  outlined dense
-                  v-model="pengajuan.pinjaman"
-                  lazy-rules
-                  map-options
-                  emit-value
+                  label="Lama Kredit"
+                  required
                   option-label="lamaKredit"
                   option-value="id_pinjaman"
+                  v-model="pengajuan.pinjaman"
                   :options="pinjamanOptions.value"
-                  @blur="$vuelidateForm.pinjaman.$touch"
-                  :error="$vuelidateForm.pinjaman.$errors.length>0"
                   @filter="filterPinjaman"
-                >
-                  <template v-slot:error>
-                    <div v-for="err in $vuelidateForm.pinjaman.$errors" :key="err.$uid">
-                      {{ err?.$message }}
-                    </div>
-                  </template>
-
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-
-                </q-select>
+                  @blur="$vuelidateForm.pinjaman.$touch"
+                  :errors="!!pengajuan.kendaraan ? $vuelidateForm.pinjaman.$errors : []"
+                />
               </div>
             </div>
 
