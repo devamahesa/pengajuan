@@ -31,3 +31,19 @@ export const post = ({path, data, params = null, isNeedAuth = false, isMultipart
     })
   })
 }
+
+export const put = ({path, data, params = null, isNeedAuth = false, isMultipartForm = false}) => {
+  return new Promise((resolve, reject) => {
+    axios({
+      baseURL: baseUrl,
+      method: 'put',
+      url: path,
+      data: data,
+      params: params,
+    }).then((res) => {
+      resolve(res)
+    }, ).catch((err) => {
+      reject(err.response?.data)
+    })
+  })
+}

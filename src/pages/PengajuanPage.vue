@@ -2,11 +2,19 @@
 
 import AppPage from "components/AppPage.vue";
 import {onMounted, ref} from "vue";
-import {getListPengajuan} from "src/lib/api.js";
+import {getListPengajuan, putApprovalStatus} from "src/lib/api.js";
 import {toIDR} from "../utils/currencyFormatter.js";
 import {useRouter} from "vue-router";
+import {useQuasar} from "quasar";
 
+const $q = useQuasar()
 const filter = ref(null)
+const approvalOptions = [
+  {label: 'Approve', value:'APPROVED'},
+  {label: 'Tolak', value:'DITOLAK'}
+]
+const approval = ref('APPROVED');
+const selectedRow = ref();
 
 const columns = [
 
@@ -24,13 +32,48 @@ const rows = ref([])
 const router = useRouter();
 
 onMounted(() => {
+  fetchPengajuan()
+})
+
+const fetchPengajuan = () => {
   getListPengajuan().then((res) => {
     rows.value = res.data
   })
-})
+}
+
+const showNotif = (message) => {
+  return $q.notify({
+    type: 'positive',
+    progress: true,
+    message: 'Success',
+    color: 'positive',
+    position: "top-right",
+    caption: message,
+    icon: 'check_circle',
+    timeout:'2000'
+  })
+}
 
 function createNewCustomer() {
   return router.push({name: 'PengajuanForm'})
+}
+
+const onViewApproval = (id) => {
+  selectedRow.value = id
+  viewDialog.value = true
+}
+
+const onSubmitApproval  = async (id) =>{
+  let params = {
+    status: approval.value,
+  }
+  return await putApprovalStatus(id, params).then(res =>{
+    showNotif(res.data)
+    fetchPengajuan()
+    viewDialog.value = false
+  }).catch((err) => {
+    showNotif(err.message)
+  })
 }
 
 const viewDialog = ref(false);
@@ -104,7 +147,7 @@ const viewDialog = ref(false);
           <template v-slot:body-cell-actions="props">
             <q-td :props="props">
               <div class="q-pa-sm q-gutter-sm" v-if="props.row.status === 'PENGAJUAN'">
-                <q-btn unelevated color="warning" round size="sm" icon="fact_check" @click="viewDialog = true"><q-tooltip>Approve</q-tooltip></q-btn>
+                <q-btn unelevated color="warning" round size="sm" icon="fact_check" @click="onViewApproval(props.row.idPengajuan)"><q-tooltip>Approve</q-tooltip></q-btn>
               </div>
             </q-td>
           </template>
@@ -132,12 +175,34 @@ const viewDialog = ref(false);
             </q-card-section>
 
             <q-card-section class="q-pt-none">
+
               Apakah anda yakin approve pengajuan ini ?
+
+              <div class="row q-my-sm">
+                <div class="col-6 q-pr-md q-gutter-y-sm " v-for="(val, i) in approvalOptions" :key="i">
+                  <div class="q-pa-sm">
+                    <q-radio :label="val.label" :val="val.value" v-model="approval"></q-radio>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row q-my-sm" v-if="approval === 'DITOLAK'">
+
+                <div class="col q-pt-md q-gutter-y-sm">
+                  <label class="q-my-sm" >Alasan Ditolak <span class="text-red">*</span></label>
+                  <q-input
+                    clearable
+                    outlined dense
+                    lazy-rules
+                  />
+                </div>
+              </div>
+
             </q-card-section>
 
             <q-card-actions align="right" class="text-primary">
-              <q-btn flat label="Ya" />
-              <q-btn flat label="Tidak" color="negative" v-close-popup />
+              <q-btn flat label="Batal" color="negative" v-close-popup />
+              <q-btn flat label="OK" @click="onSubmitApproval(selectedRow)" />
             </q-card-actions>
           </q-card>
         </q-dialog>

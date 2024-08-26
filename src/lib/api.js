@@ -1,4 +1,4 @@
-import {get,post} from "src/lib/httpHelper.js";
+import {get,post, put} from "src/lib/httpHelper.js";
 
 export const getCustomer = (id) => {
   return get({path: `/customer/${id}`})
@@ -34,4 +34,8 @@ export const postPengajuan = (params) => {
 
 export const getNextNumber = () => {
   return get({path: '/pengajuan/nextGeneratedNum'})
+}
+
+export const putApprovalStatus = (id, params) => {
+  return put({path: `/pengajuan/approval/${id}`, params: params})
 }
