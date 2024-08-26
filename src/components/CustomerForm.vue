@@ -5,23 +5,9 @@ import {useRouter} from "vue-router";
 import {postCustomer} from "src/lib/api.js";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
-import {useQuasar} from "quasar";
+import useNotify from "src/plugins/notify.js";
 
-const $q = useQuasar();
-
-const showNotif = (message) => {
-  return $q.notify({
-    type: 'positive',
-    progress: true,
-    message: 'Success',
-    color: 'positive',
-    position: "top-right",
-    caption: message,
-    icon: 'check_circle',
-    timeout:'2000'
-  })
-}
-
+const notify = useNotify();
 const cust = ref({
   custName: null,
   nik: null,
@@ -48,11 +34,10 @@ const onSubmit  = async () => {
     let data = cust.value
     return postCustomer(data)
       .then((res) => {
-        console.log(res)
-        showNotif(res.data);
+        notify.show({message: res.data, type: 'success'});
         return back()
       }).catch((err) => {
-        showNotif(err.message);
+        notify.show({message: err.message, type: 'error'});
       }).finally(() => {
 
       })

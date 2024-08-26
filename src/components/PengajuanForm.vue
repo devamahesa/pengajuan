@@ -1,6 +1,5 @@
 <script setup>
 import AppPage from "components/AppPage.vue";
-import {useQuasar} from "quasar";
 import {onMounted, reactive, ref, watch} from "vue";
 import {required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
@@ -12,8 +11,9 @@ import {
 } from "src/lib/api.js";
 import {useRouter} from "vue-router";
 import QPreloadedSelect from "components/QPreloadedSelect.vue";
+import useNotify from "src/plugins/notify.js";
 
-const $q = useQuasar();
+const notify = useNotify();
 const router = useRouter();
 
 const pengajuan = ref({
@@ -76,23 +76,9 @@ const filterPinjaman = (val, update, abort) => {
   }
 }
 
-const showNotif = (message) => {
-  return $q.notify({
-    type: 'positive',
-    progress: true,
-    message: 'Success',
-    color: 'positive',
-    position: "top-right",
-    caption: message,
-    icon: 'check_circle',
-    timeout:'2000'
-  })
-}
-
 const back = () => {
   return router.push({name: 'Pengajuan'})
 }
-
 
 const onSubmit = async () => {
   const valid = await $vuelidateForm.value.$validate();
@@ -105,11 +91,10 @@ const onSubmit = async () => {
     }
     return postPengajuan(params)
       .then((res) => {
-        console.log(res)
-        showNotif(res.data);
+        notify.show({message: res.data, type: 'success'})
         return back()
       }).catch((err) => {
-        showNotif(err.message);
+        notify.show({message: err.message, type: 'error'})
       }).finally(() => {
 
       })

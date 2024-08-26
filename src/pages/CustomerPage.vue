@@ -26,8 +26,6 @@ const router = useRouter();
 onMounted(() => {
   getListCustomer().then((res) =>{
     allData.value = res.data
-  }).catch(err => {
-    console.log(err)
   })
 });
 

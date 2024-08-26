@@ -5,9 +5,10 @@ import {onMounted, ref} from "vue";
 import {getListPengajuan, putApprovalStatus} from "src/lib/api.js";
 import {toIDR} from "../utils/currencyFormatter.js";
 import {useRouter} from "vue-router";
-import {useQuasar} from "quasar";
+import useNotify from "src/plugins/notify.js";
 
-const $q = useQuasar()
+const viewDialog = ref(false);
+const notify = useNotify();
 const filter = ref(null)
 const approvalOptions = [
   {label: 'Approve', value:'APPROVED'},
@@ -41,19 +42,6 @@ const fetchPengajuan = () => {
   })
 }
 
-const showNotif = (message) => {
-  return $q.notify({
-    type: 'positive',
-    progress: true,
-    message: 'Success',
-    color: 'positive',
-    position: "top-right",
-    caption: message,
-    icon: 'check_circle',
-    timeout:'2000'
-  })
-}
-
 function createNewCustomer() {
   return router.push({name: 'PengajuanForm'})
 }
@@ -68,15 +56,13 @@ const onSubmitApproval  = async (id) =>{
     status: approval.value,
   }
   return await putApprovalStatus(id, params).then(res =>{
-    showNotif(res.data)
+    notify.show({message: res.data, type:'success'})
     fetchPengajuan()
     viewDialog.value = false
   }).catch((err) => {
-    showNotif(err.message)
+    notify.show({message: err.message, type:'error'})
   })
 }
-
-const viewDialog = ref(false);
 
 </script>
 
