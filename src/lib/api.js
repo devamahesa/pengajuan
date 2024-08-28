@@ -39,3 +39,7 @@ export const getNextNumber = () => {
 export const putApprovalStatus = (id, params) => {
   return put({path: `/pengajuan/approval/${id}`, params: params})
 }
+
+export const getVehicleRankDashboards = (param) => {
+  return get({path: '/dashboard/vehicles/rank', params: param})
+}

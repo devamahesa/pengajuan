@@ -8,6 +8,7 @@ export const get = ({path, params, isNeedAuth = false, isMultipartForm = false})
       baseURL: baseUrl,
       method: 'get',
       url: path,
+      params: params,
     }).then(res => {
       resolve(res)
     }).catch(err => {

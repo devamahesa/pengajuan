@@ -1,8 +1,9 @@
 <script setup>
 import AppPage from "components/AppPage.vue";
 import {onMounted, ref} from "vue";
-import {getListVehicle} from "src/lib/api.js";
+import {getListVehicle, getVehicleRankDashboards} from "src/lib/api.js";
 import {toIDR} from "../utils/currencyFormatter.js";
+import Chart from "chart.js/auto";
 
 const allData = ref([])
 
@@ -16,7 +17,75 @@ const columns = [
   {name: 'actions', align:'center', label: 'Aksi'},
 ]
 
+const dataRank = ref([])
+
+const createChart = (data) => {
+  new Chart(document.getElementById('chart'),{
+    type: 'bar',
+    data: {
+      labels: data.map(row => row.rank),
+      datasets: [
+        {
+          label: 'Total Harga Kendaraan Tersedia (Miliar)',
+          data: data.map(row => row.priceSum/(10**9))
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scaleShowValues: true,
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            autosSkip: false,
+          }
+        }]
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Total Harga Kendaraan'
+        }
+      },
+      animations: {
+        duration: 1000
+      },
+      transitions: {
+        show: {
+          animations: {
+            x: {from: 0},
+            y: {from: 0}
+          }
+        }
+      },
+      hide: {
+        animations: {
+          x: {to: 0},
+          y: {to: 0}
+        }
+      },
+    }
+  })
+}
+
+const fetchRankData =  () => {
+  getVehicleRankDashboards({rankParam: 'price'}).then(res => {
+    dataRank.value = res.data
+    createChart(dataRank.value)
+  })
+}
+
+
+
+
 onMounted(() => {
+  fetchRankData()
   getListVehicle().then((res) =>{
     allData.value = res.data
   })
@@ -28,6 +97,23 @@ onMounted(() => {
   <AppPage title="Semua Kendaraan" subtitle="Menampilkan semua list kendaraan">
     <template v-slot:default>
       <div class="q-py-md">
+
+        <div class="col q-py-md">
+          <q-card class="q-pa-lg flex-block">
+
+            <div class="row" >
+              <div class="col-8">
+
+              </div>
+              <div class="col-4" >
+                <canvas id="chart" style="height: 100%"/>
+              </div>
+
+            </div>
+
+          </q-card>
+        </div>
+
         <q-table
           :rows="allData"
           :columns="columns"
